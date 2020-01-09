@@ -1,0 +1,17 @@
+# Build the image on oraclelinux (same as base for instantclient)
+FROM oraclelinux:7 as build
+RUN yum install -y oracle-golang-release-el7 && \
+	yum install -y golang unzip
+COPY . /app
+WORKDIR /app
+# unzip the wallet and set the directory in sqlnet.ora to be /wallet
+# we're doing this here because want to do our best to limit the size of the final container
+RUN unzip wallet.zip -d /wallet && \
+    sed -i -r 's/\?\/network\/admin/\/wallet/g' /wallet/sqlnet.ora
+RUN go build -o /main main.go
+
+FROM store/oracle/database-instantclient:12.2.0.1
+COPY --from=build /main /main
+COPY --from=build /wallet /wallet
+ENV TNS_ADMIN /wallet
+ENTRYPOINT ["/main"]
