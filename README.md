@@ -10,15 +10,20 @@ Print the date.
 
 I wrote some instructions for Oracle Autonomous Transaction Processing (or Autonomous Data Warehousing) databases [here](https://medium.com/@iamtheyammer/connecting-to-an-oracle-autonomous-transaction-processing-database-on-your-mac-239f7513b86e?source=friends_link&sk=550a7e27cfb3b7e2820b70f5bd06454d).
 
-Otherwise, make sure you change `connString` in `main.go`, then `make run/go`.
+Otherwise, make sure you either:
+
+- change `connString` in `main.go`
+- or set the `DATABASE_DSN` environment variable at runtime to your connString (`username/password@connString`)
+
+Then, you can `make run/go`
 
 ## What about Docker?
 
-Glad you asked. Set your connString, then `make build/docker && make run/docker`.
+Glad you asked. Set your connString using either of the above methods, then `make build/docker && make run/docker`.
 
 ### Need a wallet?
 
-I got you.
+I got you. Make sure you've set your connString using either of the above methods, then:
 
 1. Copy your wallet into the app directory
 2. Rename the zip file to `wallet.zip` (don't worry-- this file is gitignored)

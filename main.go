@@ -4,12 +4,18 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/godror/godror"
+	"os"
 )
 
 const connString = "username/password@connString"
 
 func main() {
-	db, err := sql.Open("godror", connString)
+	databaseDSN, ok := os.LookupEnv("DATABASE_DSN")
+	if !ok {
+		databaseDSN = connString
+	}
+
+	db, err := sql.Open("godror", databaseDSN)
 	if err != nil {
 		panic(fmt.Errorf("error opening db: %w", err))
 	}
